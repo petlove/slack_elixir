@@ -1,28 +1,16 @@
 defmodule Slack do
-  @moduledoc """
-  Documentation for `Slack`.
-  """
+  @moduledoc false
 
-  @doc """
-  Send message through slack webhook
+  def slack_result(response) do
+    status =
+      case response.body do
+        "ok" ->
+          :ok
 
-  ## Examples
-      iex> Slack.send_message_webhook("Hello, world", "https://slack-webhook.com/test")
-      :ok
-      iex> Slack.send_message_webhook("", "")
-      nil
-      iex> Slack.send_message_webhook(nil, nil)
-      nil
-  """
-  # Raise error
-  def send_message_webhook(nil, nil), do: nil
-  # Raise error
-  def send_message_webhook("", ""), do: nil
+        "invalid_token" ->
+          :error
+      end
 
-  def send_message_webhook(message, webhook) when is_binary(message) and is_binary(webhook) do
-    # when message and webhook is binary
-    # nil
-    :ok
+    {status, %{status_code: response.status_code, body: response.body}}
   end
-
 end
