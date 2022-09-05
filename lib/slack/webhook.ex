@@ -11,12 +11,14 @@ defmodule Slack.Webhook do
       {:error, "Message and Webhook can't be nil or empty"}
       iex> Slack.Webhook.send(nil, nil)
       {:error, "Message and Webhook can't be nil or empty"}
+      iex> Slack.Webhook.send("message", "")
+      {:error, "Message and Webhook can't be nil or empty"}
       iex> Slack.Webhook.send(%{}, %{})
       {:error, "Invalid format."}
       iex> Slack.Webhook.send("message", "invalid")
-      {:error, "Use a valid webhook link (https://hooks.slack.com/services/123)"}
+      {:error, %{response: "Use a valid webhook link.", status_code: 500}}
       iex> Slack.Webhook.send("message", "")
-      {:error, %{body: "invalid_token", status_code: 403}}
+      {:error, "Message and Webhook can't be nil or empty"}
 
   """
 
@@ -31,24 +33,32 @@ defmodule Slack.Webhook do
         text: message
       })
 
-    response =
-      HTTPoison.post(
-        webhook,
-        body,
-        "Content-Type": "application/json"
-      )
-
-    case response do
-      {:ok, result} ->
-        Slack.slack_result(result)
+    case HTTPoison.post(webhook, body, headers()) do
+      {:ok, %{status_code: status_code} = response} ->
+        response.body
+        |> response_handler(status_code)
 
       {:error, %HTTPoison.Error{id: _, reason: :nxdomain}} ->
-        {:error, "Use a valid webhook link (https://hooks.slack.com/services/123)"}
+        response_handler("Use a valid webhook link.", 500)
 
-      {:error, error} ->
-        {:error, error}
+      {_, error} ->
+        response_handler(error, nil)
     end
   end
 
   def send(_, _), do: {:error, "Invalid format."}
+
+  defp headers(), do: ["Content-Type": "application/json; charset=utf-8"]
+
+  defp response_handler(response, status_code) when status_code >= 200 and status_code <= 299 do
+    {:ok, %{status_code: status_code, response: response}}
+  end
+
+  defp response_handler("invalid_token", status_code) do
+    {:error, %{status_code: status_code, response: "Invalid webhook."}}
+  end
+
+  defp response_handler(response, status_code) do
+    {:error, %{status_code: status_code, response: response}}
+  end
 end
