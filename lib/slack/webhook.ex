@@ -9,19 +9,24 @@ defmodule Slack.Webhook do
   ## Examples
       iex> Slack.Webhook.send("", "")
       {:error, "Message and Webhook can't be nil or empty"}
+
       iex> Slack.Webhook.send(nil, nil)
       {:error, "Message and Webhook can't be nil or empty"}
+
       iex> Slack.Webhook.send("message", "")
       {:error, "Message and Webhook can't be nil or empty"}
+
       iex> Slack.Webhook.send(%{}, %{})
       {:error, "Invalid format."}
+
       iex> Slack.Webhook.send("message", "invalid")
       {:error, %{response: "Use a valid webhook link.", status_code: 500}}
+
       iex> Slack.Webhook.send("message", "")
       {:error, "Message and Webhook can't be nil or empty"}
 
   """
-
+  @spec send(binary, binary) :: tuple
   def send(message, webhook)
       when is_nil(message) or is_nil(webhook) or message == "" or webhook == "" do
     {:error, "Message and Webhook can't be nil or empty"}

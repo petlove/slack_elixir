@@ -14,7 +14,12 @@ defmodule Slack.MixProject do
         "coveralls.detail": :test,
         "coveralls.post": :test,
         "coveralls.html": :test
-      ]
+      ],
+
+      # Docs
+      name: "Slack",
+      source_url: "https://github.com/petlove/slack_elixir",
+      docs: [main: "Slack", extras: ["README.md"]]
     ]
   end
 
@@ -29,6 +34,7 @@ defmodule Slack.MixProject do
   defp deps do
     [
       {:excoveralls, "~> 0.10", only: :test},
+      {:ex_doc, "~> 0.16", only: :dev, runtime: false},
       {:httpoison, "~> 1.8"},
       {:jason, "~> 1.2"}
     ]
