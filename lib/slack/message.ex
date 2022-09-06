@@ -3,7 +3,7 @@ defmodule Slack.Message do
   Send message to slack using API token and channel ID.
   """
   @url "https://slack.com/api/chat.postMessage"
-  @token Application.fetch_env!(:slack, :token)
+  @token Application.compile_env!(:slack, :token)
 
   @doc """
   Send message function
@@ -37,6 +37,7 @@ defmodule Slack.Message do
 
   def send(channel_id, message, opts)
       when is_binary(message) and is_binary(channel_id) do
+
     body =
       %{
         text: message,
