@@ -7,7 +7,19 @@ defmodule Slack.MixProject do
       version: "0.1.0",
       elixir: "~> 1.12",
       start_permanent: Mix.env() == :prod,
-      deps: deps()
+      deps: deps(),
+      test_coverage: [tool: ExCoveralls],
+      preferred_cli_env: [
+        coveralls: :test,
+        "coveralls.detail": :test,
+        "coveralls.post": :test,
+        "coveralls.html": :test
+      ],
+
+      # Docs
+      name: "Slack",
+      source_url: "https://github.com/petlove/slack_elixir",
+      docs: [main: "Slack", extras: ["README.md"]]
     ]
   end
 
@@ -21,6 +33,8 @@ defmodule Slack.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
+      {:excoveralls, "~> 0.10", only: :test},
+      {:ex_doc, "~> 0.16", only: :dev, runtime: false},
       {:httpoison, "~> 1.8"},
       {:jason, "~> 1.2"}
     ]
