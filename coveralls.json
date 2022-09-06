@@ -1,6 +1,6 @@
 {
   "coverage_options": {
-    "minimum_coverage": 56.0,
+    "minimum_coverage": 63.0,
     "treat_no_relevant_lines_as_covered": true
   },
   "skip_files": ["test", "deps"]

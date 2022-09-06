@@ -23,19 +23,6 @@ config :slack,
   token: "slack_api_token"
 ```
 
-## Usage
-**Send a message using webhook:**
-
-##### You can only send strings and the webhook must be the full URL path.
-```Elixir
-  Slack.Webhook.send("message", "https://hooks.slack.com/services/123")
-```
-
-**Send a message using API Token and Channel ID:**
-```Elixir
-  Slack.Message.send()
-```
-
 <!-- Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_doc)
 and published on [HexDocs](https://hexdocs.pm). Once published, the docs can
 be found at [https://hexdocs.pm/slack](https://hexdocs.pm/slack). -->
