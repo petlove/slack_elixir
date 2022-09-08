@@ -32,7 +32,7 @@ defmodule Slack.Message do
   def send(channel_id, message, _opts)
       when is_nil(message) or is_nil(channel_id) or message == "" or
              channel_id == "" do
-    {:error, "Message and channel_id can't be nil or blank."}
+        response_handler("Message and channel_id can't be nil or blank.", nil)
   end
 
   def send(channel_id, message, opts)
