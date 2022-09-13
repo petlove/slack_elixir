@@ -3,7 +3,7 @@ defmodule Slack.Message do
   Send message to slack using API token and channel ID.
   """
   @url "https://slack.com/api/chat.postMessage"
-  @token Application.compile_env!(:slack, :token)
+  @token Application.get_env(:slack, :token)
 
   @doc """
   Send message function
