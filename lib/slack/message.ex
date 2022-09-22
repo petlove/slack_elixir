@@ -3,7 +3,6 @@ defmodule Slack.Message do
   Send message to slack using API token and channel ID.
   """
   @url "https://slack.com/api/chat.postMessage"
-  @token Application.get_env(:slack, :token)
 
   @doc """
   Send message function
@@ -70,7 +69,7 @@ defmodule Slack.Message do
 
   defp headers() do
     [
-      Authorization: "Bearer #{@token}",
+      Authorization: "Bearer #{token}",
       "Content-type": "application/json; charset=utf-8"
     ]
   end
@@ -95,5 +94,9 @@ defmodule Slack.Message do
 
   defp response_handler(error, status_code) do
     {:error, %{error: error, status_code: status_code}}
+  end
+
+  defp token do
+    Application.get_env(:slack, :token)
   end
 end
