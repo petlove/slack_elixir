@@ -45,6 +45,9 @@ defmodule Slack.Message do
       |> body(opts)
       |> Jason.encode!()
 
+    IO.inspect body
+    IO.inspect headers()
+
     case HTTPoison.post(@url, body, headers()) do
       {:ok, %{status_code: status_code} = response} ->
         response.body
@@ -67,9 +70,9 @@ defmodule Slack.Message do
   defp body(body, %{}), do: body
   defp body(body, _), do: body
 
-  defp headers() do
+  def headers() do
     [
-      Authorization: "Bearer #{token}",
+      Authorization: "Bearer #{token()}",
       "Content-type": "application/json; charset=utf-8"
     ]
   end
