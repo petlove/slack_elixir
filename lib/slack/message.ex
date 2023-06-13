@@ -40,7 +40,40 @@ defmodule Slack.Message do
     body =
       %{
         text: message,
-        channel: channel_id
+        channel: channel_id,
+        attachments: [
+          %{
+            color: "#5cb85c",
+            blocks: [
+              %{
+                type: "section",
+                fields: [
+                  %{
+                    type: "mrkdwn",
+                    text: "*Tamanho*\n16mb"
+                  },
+                  %{
+                    type: "mrkdwn",
+                    text: "*# de Variantes*\n45078"
+                  },
+                  %{
+                    type: "mrkdwn",
+                    text: "*Data*\n 18/04/2023 às 00:40"
+                  }
+                ],
+                accessory: %{
+                  type: "button",
+                  text: %{
+                    type: "plain_text",
+                    text: "Baixar",
+                    emoji: true
+                  },
+                  url: "https://google.com"
+                }
+              }
+            ]
+          }
+        ]
       }
       |> body(opts)
       |> Jason.encode!()
