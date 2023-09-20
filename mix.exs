@@ -35,7 +35,7 @@ defmodule Slack.MixProject do
     [
       {:excoveralls, "~> 0.10", only: :test},
       {:ex_doc, "~> 0.16", only: :dev, runtime: false},
-      {:httpoison, "~> 1.8"},
+      {:httpoison, "~> 2.0"},
       {:jason, "~> 1.2"}
     ]
   end
