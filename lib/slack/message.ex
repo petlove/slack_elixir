@@ -23,6 +23,13 @@ defmodule Slack.Message do
       iex> Slack.Message.send("channel_id", "message", %{channel_id: "123456"})
       {:error, %{error: "channel_not_found", status_code: 200}}
 
+      iex> Slack.Message.send("channel_id", "message", %{attachments: [attachment]})
+        {:ok,
+          %{
+            response: "Message sent successfully to channel ABC123",
+            status_code: 200,
+            thread_id: "123.456"
+        }}
   """
   @spec send(binary, binary) :: tuple
   @spec send(binary, binary, map) :: tuple
@@ -31,12 +38,11 @@ defmodule Slack.Message do
   def send(channel_id, message, _opts)
       when is_nil(message) or is_nil(channel_id) or message == "" or
              channel_id == "" do
-        response_handler("Message and channel_id can't be nil or blank.", nil)
+    response_handler("Message and channel_id can't be nil or blank.", nil)
   end
 
   def send(channel_id, message, opts)
       when is_binary(message) and is_binary(channel_id) do
-
     body =
       %{
         text: message,
@@ -60,12 +66,20 @@ defmodule Slack.Message do
     response_handler(%{"ok" => false, "error" => "Invalid params"}, 500)
   end
 
-  defp body(body, %{thread_id: thread_id}) do
-    Map.put(body, :thread_ts, thread_id)
-  end
+  defp body(body, nil), do: body
 
-  defp body(body, %{}), do: body
-  defp body(body, _), do: body
+  defp body(body, opts) do
+    Enum.reduce(opts, body, fn
+      {:thread_id, thread_id}, acc ->
+        Map.put(acc, :thread_ts, thread_id)
+
+      {:attachments, attachments}, acc ->
+        Map.put(acc, :attachments, attachments)
+
+      _, acc ->
+        acc
+    end)
+  end
 
   defp headers() do
     [
@@ -96,7 +110,5 @@ defmodule Slack.Message do
     {:error, %{error: error, status_code: status_code}}
   end
 
-  defp token do
-    Application.get_env(:slack, :token)
-  end
+  defp token, do: Application.get_env(:slack, :token)
 end
