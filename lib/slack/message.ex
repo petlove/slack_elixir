@@ -83,7 +83,7 @@ defmodule Slack.Message do
 
   defp headers() do
     [
-      Authorization: "Bearer #{token}",
+      Authorization: "Bearer #{token()}",
       "Content-type": "application/json; charset=utf-8"
     ]
   end
